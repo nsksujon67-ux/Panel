@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>আমার প্যানেল শপ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--g:#10b982;--gd:#059669;--bg:#f8fafc;--card:#fff;--bd:#e2e8f0;--tx:#1e293b;--mu:#64748b}
+*{box-sizing:border-box;margin:0}
+body{font-family:'Hind Siliguri',system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.5}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer}
+.wrap{max-width:1100px;margin:auto;padding:0 12px}
+header{background:var(--card);border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:10}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{font-weight:700;font-size:20px;color:var(--gd)}
+nav{display:flex;gap:8px;align-items:center}
+.btn{border:1px solid var(--bd);background:#fff;border-radius:10px;padding:6px 14px;font-weight:600}
+.btn.p{background:var(--g);border-color:var(--g);color:#fff}
+.btn:hover{opacity:.9}
+.notice{margin:12px 0;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:99px;padding:6px 14px;font-size:14px;color:var(--gd);font-weight:600;overflow:hidden;white-space:nowrap}
+.notice span{display:inline-block;padding-left:100%;animation:m 18s linear infinite}
+@keyframes m{to{transform:translateX(-100%)}}
+@media(prefers-reduced-motion:reduce){.notice span{animation:none;padding-left:0}}
+.banner{border-radius:14px;padding:28px 20px;color:#fff;background:linear-gradient(120deg,#059669,#0ea5e9);margin-bottom:14px}
+.banner h1{font-size:26px}.banner p{opacity:.9}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.steps a{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:10px;text-align:center;font-size:14px;font-weight:600}
+.steps b{display:block;color:var(--g);font-size:18px}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:14px}
+.tab{white-space:nowrap;border:1px solid var(--bd);background:#fff;border-radius:99px;padding:6px 16px;font-weight:600;font-size:14px}
+.tab.on{background:var(--g);border-color:var(--g);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:30px}
+@media(min-width:640px){.grid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:900px){.grid{grid-template-columns:repeat(5,1fr)}}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.thumb{aspect-ratio:1/1;display:grid;place-items:center;color:#fff;font-weight:700;font-size:18px;text-align:center;padding:8px}
+.info{padding:10px;display:flex;flex-direction:column;gap:8px;margin-top:auto}
+.name{font-weight:600;font-size:14px;text-align:center}
+.price{background:var(--g);color:#fff;border-radius:99px;padding:2px 12px;font-weight:700;align-self:center;font-size:14px}
+.card .btn{width:100%;font-size:14px}
+.empty{color:var(--mu);padding:20px 0;text-align:center}
+footer{border-top:1px solid var(--bd);background:#fff;padding:18px 0;text-align:center;color:var(--mu);font-size:14px}
+dialog{border:none;border-radius:16px;padding:22px;width:min(92vw,360px);box-shadow:0 20px 50px rgba(0,0,0,.2)}
+dialog::backdrop{background:rgba(15,23,42,.45)}
+dialog h2{font-size:20px;margin-bottom:12px}
+dialog input{width:100%;border:1px solid var(--bd);border-radius:10px;padding:10px;margin-bottom:10px;font:inherit}
+dialog input:focus,.btn:focus-visible,.tab:focus-visible{outline:2px solid var(--g)}
+.msg{font-size:14px;color:var(--mu);margin-top:8px;min-height:20px}
+.bal{font-weight:700;color:var(--gd)}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <a class="logo" href="#">আমার প্যানেল শপ</a>
+  <nav id="nav"></nav>
+</div></header>
+
+<main class="wrap">
+  <div class="notice"><span id="notice"></span></div>
+  <div class="banner"><h1>দ্রুত ডেলিভারি, সহজ পেমেন্ট</h1><p>টাকা যোগ করুন, প্যানেল বাছুন, কী পেয়ে যান।</p></div>
+  <div class="steps">
+    <a href="#" data-act="fund"><b>১</b>টাকা যোগ করুন</a>
+    <a href="#shop"><b>২</b>প্যানেল বাছুন</a>
+    <a href="#" data-act="orders"><b>৩</b>অর্ডার দেখুন</a>
+  </div>
+  <div class="tabs" id="tabs"></div>
+  <section id="shop"><div class="grid" id="grid"></div></section>
+</main>
+
+<footer>© <span id="yr"></span> আমার প্যানেল শপ · সাপোর্ট: <a id="sup" href="#">Telegram</a></footer>
+
+<dialog id="dAuth"><h2 id="aTitle"></h2>
+  <form id="fAuth" method="dialog">
+    <input id="aName" placeholder="নাম" autocomplete="name">
+    <input id="aMail" type="email" placeholder="ইমেইল" required autocomplete="email">
+    <input id="aPass" type="password" placeholder="পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)" minlength="6" required autocomplete="current-password">
+    <button class="btn p" style="width:100%">চালিয়ে যান</button>
+  </form><div class="msg" id="aMsg"></div></dialog>
+
+<dialog id="dFund"><h2>টাকা যোগ করুন</h2>
+  <p class="msg" id="fHelp"></p>
+  <form id="fFund" method="dialog">
+    <input id="fAmt" type="number" min="10" placeholder="পরিমাণ (৳)" required>
+    <input id="fTrx" placeholder="Transaction ID" required>
+    <button class="btn p" style="width:100%">রিকোয়েস্ট পাঠান</button>
+  </form><div class="msg" id="fMsg"></div></dialog>
+
+<dialog id="dOrd"><h2>আমার অর্ডার</h2><div id="oList"></div>
+  <button class="btn" style="width:100%;margin-top:10px" onclick="dOrd.close()">বন্ধ করুন</button></dialog>
+
+<script>
+/* ====== এখানে নিজের তথ্য বসান ====== */
+const CONFIG = {
+  shopName: "আমার প্যানেল শপ",
+  notice: "নতুন অফার চালু! প্রথম রিচার্জে বোনাস।",
+  support: "https://t.me/your_username",
+  payInfo: "bKash/Nagad Personal: 01XXXXXXXXX — টাকা পাঠিয়ে Transaction ID দিন।"
+};
+const CATEGORIES = ["NON ROOT","ROOT PANEL","IPHONE PANEL","PC PANEL"];
+const PRODUCTS = [
+  {id:1,cat:0,name:"প্যানেল ১ ঘন্টা",price:30,color:"#059669"},
+  {id:2,cat:0,name:"প্যানেল ৩ ঘন্টা",price:60,color:"#0ea5e9"},
+  {id:3,cat:0,name:"প্যানেল ১ দিন",price:120,color:"#8b5cf6"},
+  {id:4,cat:1,name:"Root প্যানেল ১ দিন",price:150,color:"#f59e0b"},
+  {id:5,cat:1,name:"Root প্যানেল ৭ দিন",price:600,color:"#ef4444"},
+  {id:6,cat:2,name:"iPhone প্যানেল ১ দিন",price:180,color:"#0f766e"},
+  {id:7,cat:3,name:"PC প্যানেল ১ দিন",price:200,color:"#4f46e5"},
+  {id:8,cat:3,name:"PC প্যানেল ৭ দিন",price:800,color:"#be185d"}
+];
+/* ==================================== */
+
+const $=s=>document.querySelector(s);
+const db={
+  get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+};
+let users=db.get("users",{}), me=db.get("me",null), cat=0, mode="login";
+
+function save(){db.set("users",users);db.set("me",me)}
+function user(){return me&&users[me]}
+
+function renderNav(){
+  const u=user();
+  $("#nav").innerHTML=u
+    ? `<span class="bal">৳${u.bal}</span><button class="btn" data-act="fund">টাকা যোগ</button><button class="btn" data-act="orders">অর্ডার</button><button class="btn" data-act="out">লগআউট</button>`
+    : `<button class="btn" data-act="login">LOGIN</button><button class="btn p" data-act="register">REGISTER</button>`;
+}
+function renderTabs(){
+  $("#tabs").innerHTML=CATEGORIES.map((c,i)=>`<button class="tab ${i===cat?"on":""}" data-cat="${i}">${c}</button>`).join("");
+}
+function renderGrid(){
+  const items=PRODUCTS.filter(p=>p.cat===cat);
+  $("#grid").innerHTML=items.length?items.map(p=>`
+    <div class="card"><div class="thumb" style="background:${p.color}">${p.name}</div>
+    <div class="info"><div class="name">${p.name}</div><span class="price">৳${p.price}</span>
+    <button class="btn p" data-buy="${p.id}">কিনুন</button></div></div>`).join("")
+    : `<p class="empty">এই ক্যাটাগরিতে এখনো কিছু নেই।</p>`;
+}
+function openAuth(m){
+  mode=m;$("#aTitle").textContent=m==="login"?"লগইন":"রেজিস্টার";
+  $("#aName").style.display=m==="login"?"none":"block";$("#aMsg").textContent="";
+  $("#dAuth").showModal();
+}
+function openOrders(){
+  const u=user(); if(!u)return openAuth("login");
+  $("#oList").innerHTML=u.orders.length?u.orders.map(o=>`<p style="padding:6px 0;border-bottom:1px solid var(--bd)">${o.name} — ৳${o.price}<br><small class="msg">${o.date}</small></p>`).join(""):`<p class="empty">কোনো অর্ডার নেই।</p>`;
+  $("#dOrd").showModal();
+}
+function openFund(){
+  if(!user())return openAuth("login");
+  $("#fHelp").textContent=CONFIG.payInfo;$("#fMsg").textContent="";$("#dFund").showModal();
+}
+
+document.addEventListener("click",e=>{
+  const t=e.target.closest("[data-act],[data-cat],[data-buy]"); if(!t)return;
+  if(t.dataset.act){e.preventDefault();
+    ({login:()=>openAuth("login"),register:()=>openAuth("register"),fund:openFund,orders:openOrders,
+      out:()=>{me=null;save();renderNav()}})[t.dataset.act]();}
+  if(t.dataset.cat){cat=+t.dataset.cat;renderTabs();renderGrid()}
+  if(t.dataset.buy){
+    const u=user(); if(!u)return openAuth("login");
+    const p=PRODUCTS.find(x=>x.id==t.dataset.buy);
+    if(u.bal<p.price)return alert("ব্যালেন্স কম। আগে টাকা যোগ করুন।");
+    if(!confirm(`${p.name} — ৳${p.price} কিনবেন?`))return;
+    u.bal-=p.price;u.orders.unshift({name:p.name,price:p.price,date:new Date().toLocaleString("bn-BD")});
+    save();renderNav();alert("অর্ডার সম্পন্ন হয়েছে।");
+  }
+});
+
+$("#fAuth").addEventListener("submit",e=>{
+  e.preventDefault();
+  const mail=$("#aMail").value.trim().toLowerCase(),pw=$("#aPass").value;
+  if(mode==="register"){
+    if(users[mail]){$("#aMsg").textContent="এই ইমেইল আগে থেকেই আছে।";return}
+    users[mail]={name:$("#aName").value||mail,pw:btoa(pw),bal:0,orders:[]};
+  }else if(!users[mail]||users[mail].pw!==btoa(pw)){
+    $("#aMsg").textContent="ইমেইল বা পাসওয়ার্ড ভুল।";return;
+  }
+  me=mail;save();renderNav();$("#dAuth").close();
+});
+$("#fFund").addEventListener("submit",e=>{
+  e.preventDefault();
+  /* ডেমো: আসল সাইটে এখানে সার্ভারে রিকোয়েস্ট যাবে এবং অ্যাডমিন অ্যাপ্রুভ করলে ব্যালেন্স বাড়বে */
+  $("#fMsg").textContent="রিকোয়েস্ট জমা হয়েছে। অ্যাডমিন যাচাই করলে ব্যালেন্সে যুক্ত হবে।";
+  $("#fAmt").value="";$("#fTrx").value="";
+});
+document.title=CONFIG.shopName;
+$("#notice").textContent=CONFIG.notice;$("#sup").href=CONFIG.support;$("#yr").textContent=new Date().getFullYear();
+renderNav();renderTabs();renderGrid();
+</script>
+</body>
+</html>
